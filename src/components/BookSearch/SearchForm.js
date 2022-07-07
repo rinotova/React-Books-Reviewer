@@ -30,9 +30,15 @@ const SearchForm = () => {
       const mappedSearchSuggestions = books
         .filter((book) => book.volumeInfo.title)
         .map((book) => {
+          let authors = book?.volumeInfo?.authors;
+          let imgUrl = book.volumeInfo?.imageLinks?.smallThumbnail;
           return {
             id: book.id,
             title: book.volumeInfo.title,
+            year: book.volumeInfo.publishedDate,
+            editorial: book.volumeInfo.publisher,
+            imgUrl: imgUrl ? imgUrl : '',
+            authors: authors ? authors.join(',') : '',
           };
         });
 
@@ -77,7 +83,7 @@ const SearchForm = () => {
   return (
     <form>
       <input
-        type="text"
+        type="search"
         ref={inputSearchRef}
         className="form-control form-control-lg"
         placeholder="Book title..."

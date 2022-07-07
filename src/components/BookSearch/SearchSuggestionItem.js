@@ -1,20 +1,21 @@
-import { useSelector } from 'react-redux';
-
-function bolderize(text, matchingText) {
-  return text.replace(new RegExp('(' + matchingText + ')', 'gi'), '<b>$1</b>');
-}
-
 const SearchSuggestionItem = (props) => {
-  const searchTerm = useSelector((state) => state.searchSuggestions.searchTerm);
-
+  const { searchSuggestion } = props;
   return (
     <button
-      dangerouslySetInnerHTML={{
-        __html: bolderize(props.searchSuggestion.title, searchTerm),
-      }}
       onClick={props.onSearchSuggestionClick}
       className="list-group-item list-group-item-action"
-    ></button>
+    >
+      <div className="d-flex flex-row">
+        <img src={searchSuggestion.imgUrl} alt={searchSuggestion.title} />
+        <div className="d-flex flex-column">
+          <h6>{searchSuggestion.title}</h6>
+          <p>
+            {searchSuggestion.authors}, {searchSuggestion.year}
+          </p>
+          <p>{searchSuggestion.editorial}</p>
+        </div>
+      </div>
+    </button>
   );
 };
 
