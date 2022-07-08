@@ -1,38 +1,35 @@
 import { useSelector } from 'react-redux';
 import SearchSuggestionItem from './SearchSuggestionItem';
+import classes from './SearchSuggestions.module.css';
 
 const SearchSuggestions = () => {
   const searchSuggestions = useSelector(
     (state) => state.searchSuggestions.searchSuggestions
   );
+  const showSuggestions = useSelector(
+    (state) => state.searchSuggestions.showSuggestions
+  );
   let mappedSearchSuggestions;
 
-  const searchSuggestionClickHandler = (id) => {
-    console.log(id);
-  };
-
-  if (searchSuggestions.length > 0) {
+  if (searchSuggestions.length > 0 && showSuggestions) {
     mappedSearchSuggestions = searchSuggestions.map((searchSuggestion) => {
       return (
         <SearchSuggestionItem
           key={searchSuggestion.id}
           searchSuggestion={searchSuggestion}
-          onSearchSuggestionClick={searchSuggestionClickHandler.bind(
-            null,
-            searchSuggestion.id
-          )}
         />
       );
     });
   } else {
     return;
   }
+  const listGroupClasses = `list-group ${classes['suggestions-list']}`;
 
   return (
     <div className="row">
       <div className="col">
-        <div className="d-flex flex-column">
-          <div className="list-group">{mappedSearchSuggestions}</div>
+        <div className="d-flex flex-column border-bottom">
+          <div className={listGroupClasses}>{mappedSearchSuggestions}</div>
         </div>
       </div>
     </div>

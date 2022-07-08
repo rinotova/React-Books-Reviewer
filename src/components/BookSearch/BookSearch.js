@@ -8,7 +8,9 @@ const BookSearch = () => {
   const searchSuggestions = useSelector(
     (state) => state.searchSuggestions.searchSuggestions
   );
+
   const hasSearchSuggestions = searchSuggestions.length > 0;
+
   return (
     <Fragment>
       <Section>

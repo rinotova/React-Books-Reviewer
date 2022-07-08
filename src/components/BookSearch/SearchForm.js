@@ -20,6 +20,11 @@ const SearchForm = () => {
     );
   };
 
+  const onClickSearchTermHandler = (e) => {
+    e.stopPropagation();
+    dispatch(searchSuggestionsActions.showSuggestions());
+  };
+
   const processSuggestionsResults = useCallback(
     ({ items: books }) => {
       if (!books || books.length === 0) {
@@ -32,13 +37,17 @@ const SearchForm = () => {
         .map((book) => {
           let authors = book?.volumeInfo?.authors;
           let imgUrl = book.volumeInfo?.imageLinks?.smallThumbnail;
+          let imgCoverUrl = book.volumeInfo?.imageLinks?.thumbnail;
           return {
             id: book.id,
             title: book.volumeInfo.title,
-            year: book.volumeInfo.publishedDate,
+            year: new Date(book.volumeInfo.publishedDate).getFullYear() + '.',
             editorial: book.volumeInfo.publisher,
             imgUrl: imgUrl ? imgUrl : '',
             authors: authors ? authors.join(',') : '',
+            isbn: book.volumeInfo.industryIdentifiers[0].identifier,
+            sinopsis: book.volumeInfo.description,
+            imgCoverUrl: imgCoverUrl ? imgCoverUrl : '',
           };
         });
 
@@ -88,6 +97,7 @@ const SearchForm = () => {
         className="form-control form-control-lg"
         placeholder="Book title..."
         onInput={onInputSearchTermHandler}
+        onClick={onClickSearchTermHandler}
       />
     </form>
   );
