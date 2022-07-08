@@ -48,6 +48,7 @@ const SearchForm = () => {
             isbn: book.volumeInfo.industryIdentifiers[0].identifier,
             sinopsis: book.volumeInfo.description,
             imgCoverUrl: imgCoverUrl ? imgCoverUrl : '',
+            previewLink: book.volumeInfo.previewLink,
           };
         });
 

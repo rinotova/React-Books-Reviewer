@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200&display=swap');
+
 body {
   margin: 0;
   overflow-x: hidden;
+  font-family: 'Roboto Slab', serif;
 }

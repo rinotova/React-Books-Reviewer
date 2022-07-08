@@ -16,11 +16,18 @@ const SearchSuggestionItem = (props) => {
       className="list-group-item list-group-item-action"
     >
       <div className="d-flex flex-row p-2 mx-2">
-        <img
-          className={classes.bookCover}
-          src={searchSuggestion.imgUrl}
-          alt={searchSuggestion.title}
-        />
+        {searchSuggestion.imgUrl && (
+          <img
+            className={classes.bookCover}
+            src={searchSuggestion.imgUrl}
+            alt={searchSuggestion.title}
+          />
+        )}
+        {!searchSuggestion.imgUrl && (
+          <div className={classes.imgPlaceholder}>
+            <h6>No cover</h6>
+          </div>
+        )}
         <div className="d-flex flex-column p-2">
           <h5>{searchSuggestion.title}</h5>
           <p>

@@ -17,8 +17,8 @@ function App() {
   return (
     <Fragment>
       <Header />
-      <main>
-        <div className="container">
+      <main className="mainContainer">
+        <div className="container-max">
           <BookSearch />
           <BookReview />
         </div>
