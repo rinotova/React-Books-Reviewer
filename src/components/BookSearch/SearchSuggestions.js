@@ -6,23 +6,30 @@ const SearchSuggestions = () => {
   const searchSuggestions = useSelector(
     (state) => state.searchSuggestions.searchSuggestions
   );
+
   const showSuggestions = useSelector(
     (state) => state.searchSuggestions.showSuggestions
   );
-  let mappedSearchSuggestions;
 
-  if (searchSuggestions.length > 0 && showSuggestions) {
-    mappedSearchSuggestions = searchSuggestions.map((searchSuggestion) => {
-      return (
+  if (searchSuggestions.length === 0 || !showSuggestions) {
+    return;
+  }
+
+  let mappedSearchSuggestions = [];
+  let bookIds = [];
+  searchSuggestions.forEach((searchSuggestion) => {
+    if (bookIds.indexOf(searchSuggestion.id !== -1)) {
+      bookIds.push(searchSuggestion.id);
+
+      mappedSearchSuggestions.push(
         <SearchSuggestionItem
           key={searchSuggestion.id}
           searchSuggestion={searchSuggestion}
         />
       );
-    });
-  } else {
-    return;
-  }
+    }
+  });
+
   const listGroupClasses = `list-group ${classes['suggestions-list']}`;
 
   return (

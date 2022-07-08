@@ -1,4 +1,4 @@
 .suggestions-list {
-  max-height: 300px;
-  overflow: scroll;
+  max-height: 400px;
+  overflow-y: scroll;
 }

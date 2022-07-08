@@ -4,21 +4,12 @@ import { searchSuggestionsActions } from '../../store/slices/search-suggestions-
 import { fromEvent, distinctUntilChanged, debounceTime, map, tap } from 'rxjs';
 import useFetch from '../../hooks/use-fetch';
 import { urls } from '../../utils/urls';
+import Section from '../Layout/Section/Section';
 
 const SearchForm = () => {
   const inputSearchRef = useRef('');
   const dispatch = useDispatch();
-  const { isFetchError, sendRequest } = useFetch();
-
-  if (isFetchError) {
-    dispatch(searchSuggestionsActions.removeSuggestions());
-  }
-
-  const onInputSearchTermHandler = () => {
-    dispatch(
-      searchSuggestionsActions.updateSearchTerm(inputSearchRef.current.value)
-    );
-  };
+  const { sendRequest } = useFetch();
 
   const onClickSearchTermHandler = (e) => {
     e.stopPropagation();
@@ -32,13 +23,17 @@ const SearchForm = () => {
         return;
       }
 
-      const mappedSearchSuggestions = books
-        .filter((book) => book.volumeInfo.title)
+      let mappedSearchSuggestions = books
+        .filter(
+          (book) =>
+            book.volumeInfo.title && 'industryIdentifiers' in book.volumeInfo
+        )
         .map((book) => {
           let authors = book?.volumeInfo?.authors;
           let imgUrl = book.volumeInfo?.imageLinks?.smallThumbnail;
           let imgCoverUrl = book.volumeInfo?.imageLinks?.thumbnail;
-          return {
+
+          const bookObj = {
             id: book.id,
             title: book.volumeInfo.title,
             year: new Date(book.volumeInfo.publishedDate).getFullYear() + '.',
@@ -50,6 +45,8 @@ const SearchForm = () => {
             imgCoverUrl: imgCoverUrl ? imgCoverUrl : '',
             previewLink: book.volumeInfo.previewLink,
           };
+
+          return bookObj;
         });
 
       if (mappedSearchSuggestions.length > 0) {
@@ -65,6 +62,9 @@ const SearchForm = () => {
 
   const searchSuggestionsDispatchHandler = useCallback(
     (searchTerm) => {
+      dispatch(
+        searchSuggestionsActions.updateSearchTerm(inputSearchRef.current.value)
+      );
       if (searchTerm.length < 3) {
         dispatch(searchSuggestionsActions.removeSuggestions());
       } else {
@@ -91,16 +91,19 @@ const SearchForm = () => {
   }, [searchSuggestionsDispatchHandler]);
 
   return (
-    <form>
-      <input
-        type="search"
-        ref={inputSearchRef}
-        className="form-control form-control-lg"
-        placeholder="Book title..."
-        onInput={onInputSearchTermHandler}
-        onClick={onClickSearchTermHandler}
-      />
-    </form>
+    <Section>
+      <div className="col">
+        <form>
+          <input
+            type="search"
+            ref={inputSearchRef}
+            className="form-control form-control-lg"
+            placeholder="Book title..."
+            onClick={onClickSearchTermHandler}
+          />
+        </form>
+      </div>
+    </Section>
   );
 };
 
