@@ -6,8 +6,10 @@ import './App.css';
 import BookReview from './components/BookReview/BookReview';
 import SearchForm from './components/BookSearch/SearchForm';
 import SearchSuggestions from './components/BookSearch/SearchSuggestions';
+import store from './store';
 
 function App() {
+  const database = store.getState().database.database;
   const dispatch = useDispatch();
   useEffect(() => {
     document.addEventListener('click', () => {
@@ -21,7 +23,7 @@ function App() {
       <main className="mainContainer">
         <div className="container-max">
           <SearchForm />
-          <SearchSuggestions />
+          <SearchSuggestions database={database} />
           <BookReview />
         </div>
       </main>

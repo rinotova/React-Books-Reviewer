@@ -1,11 +1,12 @@
 import { useSelector } from 'react-redux';
 import BookTile from '../BookTile/BookTile';
 import Section from '../Layout/Section/Section';
+import FormReview from './FormReview';
 
 const BookReview = () => {
   const selectedBook = useSelector((state) => state.selectedBook.selectedBook);
 
-  if (!selectedBook.id) {
+  if (!selectedBook || Object.keys(selectedBook).length === 0) {
     return;
   }
 
@@ -13,6 +14,7 @@ const BookReview = () => {
     <Section>
       <div className="col">
         <BookTile selectedBook={selectedBook} />
+        <FormReview selectedBook={selectedBook} />
       </div>
     </Section>
   );

@@ -60,23 +60,29 @@ const SearchForm = () => {
     [dispatch]
   );
 
+  const onChangeSearchTermHandler = () => {
+    dispatch(
+      searchSuggestionsActions.updateSearchTerm(inputSearchRef.current.value)
+    );
+  };
+
   const searchSuggestionsDispatchHandler = useCallback(
     (searchTerm) => {
-      dispatch(
-        searchSuggestionsActions.updateSearchTerm(inputSearchRef.current.value)
-      );
       if (searchTerm.length < 3) {
         dispatch(searchSuggestionsActions.removeSuggestions());
       } else {
         sendRequest(
           urls.getSearchByTermUrl(searchTerm),
           null,
-          processSuggestionsResults
+          processSuggestionsResults,
+          null
         );
       }
     },
     [dispatch, sendRequest, processSuggestionsResults]
   );
+
+  const submitHandler = (e) => e.preventDefault();
 
   useEffect(() => {
     const inputSearch$ = fromEvent(inputSearchRef.current, 'input');
@@ -88,18 +94,23 @@ const SearchForm = () => {
         tap((searchTerm) => searchSuggestionsDispatchHandler(searchTerm))
       )
       .subscribe();
+
+    return () => {
+      inputSearch$.unsubscribe();
+    };
   }, [searchSuggestionsDispatchHandler]);
 
   return (
     <Section>
       <div className="col">
-        <form>
+        <form onSubmit={submitHandler}>
           <input
             type="search"
             ref={inputSearchRef}
             className="form-control form-control-lg"
             placeholder="Book title..."
             onClick={onClickSearchTermHandler}
+            onChange={onChangeSearchTermHandler}
           />
         </form>
       </div>

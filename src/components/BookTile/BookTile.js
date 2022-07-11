@@ -11,6 +11,7 @@ const BookTile = ({ selectedBook }) => {
               src={selectedBook.imgCoverUrl}
               alt={selectedBook.title}
               className="d-block img-fluid rounded-start m-2"
+              loading="lazy"
             />
           )}
           {!selectedBook.imgCoverUrl && (

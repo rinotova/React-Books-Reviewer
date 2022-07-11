@@ -1,6 +1,10 @@
 import { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useFetchActions } from '../store/slices/use-fetch-slice';
+import store from '../store';
 
 const useFetch = () => {
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchError, setIsFetchError] = useState(null);
 
@@ -13,7 +17,15 @@ const useFetch = () => {
     ) => {
       try {
         setIsLoading(true);
-        const response = await fetch(url, { ...requestConfig });
+
+        // Abort previous ongoing request and set a new abort controller
+        const controller = store.getState().useFetch.controller;
+        controller.abort();
+        let newController = new AbortController();
+        let signal = newController.signal;
+        dispatch(useFetchActions.setController(newController));
+
+        const response = await fetch(url, { ...requestConfig, signal });
 
         if (!response.ok) {
           throw new Error('Something went wrong');
@@ -27,7 +39,7 @@ const useFetch = () => {
       }
       setIsLoading(false);
     },
-    []
+    [dispatch]
   );
   return { isLoading, isFetchError, sendRequest };
 };

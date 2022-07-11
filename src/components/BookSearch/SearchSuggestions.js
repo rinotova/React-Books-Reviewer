@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import SearchSuggestionItem from './SearchSuggestionItem';
 import classes from './SearchSuggestions.module.css';
 
-const SearchSuggestions = () => {
+const SearchSuggestions = (props) => {
   const searchSuggestions = useSelector(
     (state) => state.searchSuggestions.searchSuggestions
   );
@@ -25,6 +25,7 @@ const SearchSuggestions = () => {
         <SearchSuggestionItem
           key={searchSuggestion.id}
           searchSuggestion={searchSuggestion}
+          database={props.database}
         />
       );
     }

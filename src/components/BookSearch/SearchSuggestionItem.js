@@ -1,13 +1,25 @@
 import { useDispatch } from 'react-redux';
+import { ref, onValue } from 'firebase/database';
 import { selectedBookActions } from '../../store/slices/selected-book-slice';
+import { urls } from '../../utils/urls';
 import classes from './SearchSuggestionItem.module.css';
 
 const SearchSuggestionItem = (props) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { searchSuggestion } = props;
 
+  const processBookReview = (bookReview) => {
+    console.log(bookReview);
+    // dispatch(selectedBookActions.updateSelectedBook(searchSuggestion));
+  };
+
   const searchSuggestionClickHandler = (e) => {
-    dispatch(selectedBookActions.updateSelectedBook(searchSuggestion));
+    var leadsRef = ref(props.database, 'reviews/');
+    onValue(leadsRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+    });
+    // sendRequest(urls.getReviewedBookUrl(props.isbn), null, processBookReview);
   };
 
   return (
@@ -21,6 +33,7 @@ const SearchSuggestionItem = (props) => {
             className={classes.bookCover}
             src={searchSuggestion.imgUrl}
             alt={searchSuggestion.title}
+            loading="lazy"
           />
         )}
         {!searchSuggestion.imgUrl && (
