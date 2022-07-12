@@ -3,7 +3,7 @@ import BookTile from '../BookTile/BookTile';
 import Section from '../Layout/Section/Section';
 import FormReview from './FormReview';
 
-const BookReview = () => {
+const BookReview = (props) => {
   const selectedBook = useSelector((state) => state.selectedBook.selectedBook);
 
   if (!selectedBook || Object.keys(selectedBook).length === 0) {
@@ -14,7 +14,7 @@ const BookReview = () => {
     <Section>
       <div className="col">
         <BookTile selectedBook={selectedBook} />
-        <FormReview selectedBook={selectedBook} />
+        <FormReview selectedBook={selectedBook} database={props.database} />
       </div>
     </Section>
   );

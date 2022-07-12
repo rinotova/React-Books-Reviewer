@@ -37,13 +37,13 @@ const SearchForm = () => {
             id: book.id,
             title: book.volumeInfo.title,
             year: new Date(book.volumeInfo.publishedDate).getFullYear() + '.',
-            editorial: book.volumeInfo.publisher,
+            editorial: book.volumeInfo.publisher || '',
             imgUrl: imgUrl ? imgUrl : '',
             authors: authors ? authors.join(',') : '',
             isbn: book.volumeInfo.industryIdentifiers[0].identifier,
-            sinopsis: book.volumeInfo.description,
+            sinopsis: book.volumeInfo.description || '',
             imgCoverUrl: imgCoverUrl ? imgCoverUrl : '',
-            previewLink: book.volumeInfo.previewLink,
+            previewLink: book.volumeInfo.previewLink || '',
           };
 
           return bookObj;

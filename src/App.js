@@ -7,6 +7,7 @@ import BookReview from './components/BookReview/BookReview';
 import SearchForm from './components/BookSearch/SearchForm';
 import SearchSuggestions from './components/BookSearch/SearchSuggestions';
 import store from './store';
+import ReviewsList from './components/ReviewsList/ReviewsList';
 
 function App() {
   const database = store.getState().database.database;
@@ -23,8 +24,9 @@ function App() {
       <main className="mainContainer">
         <div className="container-max">
           <SearchForm />
-          <SearchSuggestions database={database} />
-          <BookReview />
+          <SearchSuggestions />
+          <BookReview database={database} />
+          <ReviewsList database={database} />
         </div>
       </main>
     </Fragment>

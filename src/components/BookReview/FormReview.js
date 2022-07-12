@@ -1,22 +1,71 @@
 import { Rating, Typography } from '@mui/material';
 import { useState, useRef } from 'react';
+import { ref, child, push, set, get } from 'firebase/database';
+import { useDispatch } from 'react-redux';
+import { selectedBookActions } from '../../store/slices/selected-book-slice';
+import { reviewsListActions } from '../../store/slices/reviews-list-slice';
 
-const FormReview = ({ selectedBook }) => {
+const FormReview = ({ selectedBook, database }) => {
+  const dispatch = useDispatch();
   const [bookRating, setBookRating] = useState(0);
   const reviewTextRef = useRef('');
 
-  const onSubmitBookReviewHandler = (e) => {
-    e.preventDefault();
-    const bookReview = {
-      ...selectedBook,
-      ratings: selectedBook.ratings.push({
-        reviewText: reviewTextRef.current.value,
-        rating: bookRating,
-      }),
-    };
+  const getDate = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; // Months start at 0!
+    let dd = today.getDate();
 
-    console.log(bookReview);
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+
+    const formattedToday = dd + '/' + mm + '/' + yyyy;
+    return formattedToday;
   };
+
+  const onCancelReviewHandler = () => {
+    dispatch(selectedBookActions.updateSelectedBook({}));
+  };
+
+  const onSubmitBookReviewHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      const bookToReview = await get(
+        ref(database, 'reviews/books/' + selectedBook.isbn)
+      );
+      const dataFromFirebaseBook = bookToReview.val();
+
+      const theBook = {
+        ...selectedBook,
+        rating:
+          dataFromFirebaseBook && 'rating' in dataFromFirebaseBook
+            ? Math.ceil((bookRating + dataFromFirebaseBook.rating) / 2)
+            : bookRating,
+      };
+
+      const theReview = {
+        bookId: selectedBook.isbn,
+        rating: bookRating,
+        review: reviewTextRef.current.value,
+        date: getDate(),
+      };
+
+      // Get a key for a new rating.
+      const newRatingKey = push(child(ref(database), 'posts')).key;
+
+      set(ref(database, 'reviews/books/' + selectedBook.isbn), theBook)
+        .then(() => {
+          set(ref(database, 'reviews/bookReviews/' + newRatingKey), theReview);
+        })
+        .then(() => {
+          dispatch(selectedBookActions.updateSelectedBook({}));
+        });
+    } catch (e) {
+      dispatch(selectedBookActions.updateSelectedBook({}));
+    }
+  };
+
   return (
     <form onSubmit={onSubmitBookReviewHandler}>
       <div className="row">
@@ -41,13 +90,16 @@ const FormReview = ({ selectedBook }) => {
             onChange={(event, newValue) => {
               setBookRating(newValue);
             }}
-            precision={0.5}
           />
         </div>
         <div className="col-4">
           <div className="row justify-content-end">
             <div className="col">
-              <button type="button" className="btn btn-link">
+              <button
+                onClick={onCancelReviewHandler}
+                type="button"
+                className="btn btn-link"
+              >
                 Cancel
               </button>
             </div>
