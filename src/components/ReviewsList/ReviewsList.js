@@ -1,71 +1,16 @@
-import { useCallback, useEffect } from 'react';
-import { onValue, ref, orderByChild, query } from 'firebase/database';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { reviewsListActions } from '../../store/slices/reviews-list-slice';
 import ReviewListItem from './ReviewListItem';
+import useGetReviews from '../../hooks/use-get-reviews';
 
 const ReviewsList = (props) => {
-  const dispatch = useDispatch();
   const reviewsList = useSelector((state) => state.reviewsList.reviewsList);
-
-  const loadReviews = useCallback(
-    (books) => {
-      const reviewsObj = {};
-      let theBook;
-      const reviewsRef = query(
-        ref(props.database, 'reviews/bookReviews/'),
-        orderByChild('modified')
-      );
-      onValue(
-        reviewsRef,
-        (snapshot) => {
-          snapshot.forEach((child) => {
-            const review = child.val();
-            let reviewsArray = [];
-            theBook = reviewsObj[review.bookId];
-
-            if (theBook) {
-              reviewsArray = theBook.reviews.concat([
-                { ...review, reviewId: child.key },
-              ]);
-            } else {
-              reviewsArray = new Array({ ...review, reviewId: child.key });
-            }
-
-            reviewsObj[review.bookId] = {
-              ...books[review.bookId],
-              reviews: reviewsArray,
-            };
-          });
-          dispatch(reviewsListActions.updateReviewsList(reviewsObj));
-        },
-        {
-          onlyOnce: true,
-        }
-      );
-    },
-    [props.database, dispatch]
-  );
+  const { loadReviews } = useGetReviews(props.database);
 
   useEffect(() => {
     console.log('running reviews list');
-    const booksRef = ref(props.database, 'reviews/books/');
-    const booksObj = {};
-
-    onValue(
-      booksRef,
-      (snapshot) => {
-        snapshot.forEach((child) => {
-          booksObj[child.key] = child.val();
-        });
-        loadReviews(booksObj);
-      },
-      {
-        onlyOnce: true,
-      }
-    );
-  }, [props.database, loadReviews]);
+    loadReviews();
+  }, [loadReviews]);
 
   const reviews = [];
 

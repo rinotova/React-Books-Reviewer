@@ -3,10 +3,11 @@ import { useState, useRef } from 'react';
 import { ref, child, push, set, get } from 'firebase/database';
 import { useDispatch } from 'react-redux';
 import { selectedBookActions } from '../../store/slices/selected-book-slice';
-import { reviewsListActions } from '../../store/slices/reviews-list-slice';
+import useGetReviews from '../../hooks/use-get-reviews';
 
 const FormReview = ({ selectedBook, database }) => {
   const dispatch = useDispatch();
+  const { loadReviews } = useGetReviews(database);
   const [bookRating, setBookRating] = useState(0);
   const reviewTextRef = useRef('');
 
@@ -61,7 +62,9 @@ const FormReview = ({ selectedBook, database }) => {
         })
         .then(() => {
           dispatch(selectedBookActions.updateSelectedBook({}));
-          dispatch(reviewsListActions.updateReviewsList({}));
+        })
+        .then(() => {
+          loadReviews();
         });
     } catch (e) {
       dispatch(selectedBookActions.updateSelectedBook({}));
