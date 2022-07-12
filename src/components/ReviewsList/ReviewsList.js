@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { onValue, ref } from 'firebase/database';
+import { onValue, ref, orderByChild, query } from 'firebase/database';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { reviewsListActions } from '../../store/slices/reviews-list-slice';
@@ -13,8 +13,10 @@ const ReviewsList = (props) => {
     (books) => {
       const reviewsObj = {};
       let theBook;
-
-      const reviewsRef = ref(props.database, 'reviews/bookReviews/');
+      const reviewsRef = query(
+        ref(props.database, 'reviews/bookReviews/'),
+        orderByChild('modified')
+      );
       onValue(
         reviewsRef,
         (snapshot) => {
@@ -47,7 +49,7 @@ const ReviewsList = (props) => {
   );
 
   useEffect(() => {
-    console.log('running yes');
+    console.log('running reviews list');
     const booksRef = ref(props.database, 'reviews/books/');
     const booksObj = {};
 

@@ -49,6 +49,7 @@ const FormReview = ({ selectedBook, database }) => {
         rating: bookRating,
         review: reviewTextRef.current.value,
         date: getDate(),
+        modified: -1 * new Date().getTime(),
       };
 
       // Get a key for a new rating.
@@ -60,6 +61,7 @@ const FormReview = ({ selectedBook, database }) => {
         })
         .then(() => {
           dispatch(selectedBookActions.updateSelectedBook({}));
+          dispatch(reviewsListActions.updateReviewsList({}));
         });
     } catch (e) {
       dispatch(selectedBookActions.updateSelectedBook({}));
