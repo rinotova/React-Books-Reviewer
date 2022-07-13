@@ -31,13 +31,13 @@ const SearchSuggestions = (props) => {
     }
   });
 
-  const listGroupClasses = `list-group ${classes['suggestions-list']}`;
+  const listGroupClasses = `d-flex flex-column border-bottom ${classes['suggestions-list']}`;
 
   return (
     <div className="row">
       <div className="col">
-        <div className="d-flex flex-column border-bottom">
-          <div className={listGroupClasses}>{mappedSearchSuggestions}</div>
+        <div className={listGroupClasses}>
+          <div className="list-group">{mappedSearchSuggestions}</div>
         </div>
       </div>
     </div>
