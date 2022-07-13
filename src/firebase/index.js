@@ -1,6 +1,4 @@
 import { initializeApp } from 'firebase/app';
-import { onValue, orderByChild, query, ref } from 'firebase/database';
-import { useDispatch } from 'react-redux';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
