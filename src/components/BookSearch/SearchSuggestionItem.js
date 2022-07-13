@@ -10,11 +10,9 @@ const SearchSuggestionItem = (props) => {
     dispatch(selectedBookActions.updateSelectedBook(searchSuggestion));
   };
 
+  const buttonClasses = `list-group-item list-group-item-action ${classes.suggestionButton}`;
   return (
-    <button
-      onClick={searchSuggestionClickHandler}
-      className="list-group-item list-group-item-action"
-    >
+    <button onClick={searchSuggestionClickHandler} className={buttonClasses}>
       <div className="d-flex flex-row p-2 mx-2">
         {searchSuggestion.imgUrl && (
           <img
