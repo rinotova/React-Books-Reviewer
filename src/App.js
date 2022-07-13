@@ -8,6 +8,7 @@ import SearchForm from './components/BookSearch/SearchForm';
 import SearchSuggestions from './components/BookSearch/SearchSuggestions';
 import store from './store';
 import ReviewsList from './components/ReviewsList/ReviewsList';
+import Footer from './components/Footer/Footer';
 
 function App() {
   const database = store.getState().database.database;
@@ -29,6 +30,7 @@ function App() {
           <ReviewsList database={database} />
         </div>
       </main>
+      <Footer />
     </Fragment>
   );
 }
