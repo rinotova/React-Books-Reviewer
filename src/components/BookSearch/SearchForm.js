@@ -108,7 +108,7 @@ const SearchForm = () => {
             type="search"
             ref={inputSearchRef}
             className="form-control form-control-lg"
-            placeholder="Book title..."
+            placeholder="Type a book title..."
             onClick={onClickSearchTermHandler}
             onChange={onChangeSearchTermHandler}
           />
