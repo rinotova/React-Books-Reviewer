@@ -8,7 +8,6 @@ const ReviewsList = (props) => {
   const { loadReviews } = useGetReviews(props.database);
 
   useEffect(() => {
-    console.log('running reviews list');
     loadReviews();
   }, [loadReviews]);
 
