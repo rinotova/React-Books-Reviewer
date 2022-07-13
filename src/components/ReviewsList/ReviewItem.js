@@ -5,7 +5,7 @@ const ReviewItem = (props) => {
     <div className="container">
       <div className="row mt-4">
         <div className="col">
-          <p>Rino Tovar</p>
+          <p>Anonymous</p>
         </div>
         <div className="col">
           <p>{props.review.date}</p>
